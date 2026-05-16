@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.estudantesapp.MainActivity
+import com.example.estudantesapp.HomeActivity
 import com.example.estudantesapp.R
 import com.example.estudantesapp.RetrofitClient
 import com.example.estudantesapp.model.LoginRequest
@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             intent.putExtra("token", token)
                             startActivity(intent)
 

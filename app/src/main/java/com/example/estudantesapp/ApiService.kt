@@ -5,6 +5,7 @@ import com.example.estudantesapp.model.LoginRequest
 import com.example.estudantesapp.model.LoginResponse
 import retrofit2.Call
 import retrofit2.http.*
+
 interface ApiService {
     @POST("/auth/login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
@@ -20,10 +21,16 @@ interface ApiService {
         @Body estudante: Estudante
     ): Call<Void>
 
+    @PUT("/estudantes/{id}")
+    fun atualizar(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body estudante: Estudante
+    ): Call<Void>
+
     @DELETE("/estudantes/{id}")
     fun deletar(
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Call<Void>
 }
-

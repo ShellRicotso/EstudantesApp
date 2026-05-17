@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.estudantesapp.model.Estudante
 import retrofit2.Call
@@ -15,58 +16,82 @@ class HomeActivity : AppCompatActivity() {
 
     lateinit var token: String
     lateinit var listView: ListView
-    lateinit var lista: ArrayList<String>
+    lateinit var dados: List<Estudante>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // Recupera o token passado pelo LoginActivity
         token = intent.getStringExtra("token")!!
-
         listView = findViewById(R.id.listView)
-        val btnAdd = findViewById<Button>(R.id.btnAdd)
 
-        // Carregar lista de estudantes
-        carregarEstudantes()
+        carregar()
 
-        // Botão para adicionar estudante
-        btnAdd.setOnClickListener {
+        //  Adicionar estudante
+        findViewById<Button>(R.id.btnAdd).setOnClickListener {
             val i = Intent(this, AddStudentActivity::class.java)
             i.putExtra("token", token)
             startActivity(i)
         }
+
+        // ✏Editar estudante (clique simples)
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val estudante = dados[position]
+
+            val i = Intent(this, AddStudentActivity::class.java)
+            i.putExtra("token", token)
+            i.putExtra("id", estudante.id)
+            i.putExtra("nome", estudante.nome)
+            i.putExtra("email", estudante.email)
+            i.putExtra("contacto", estudante.contacto)
+
+            startActivity(i)
+        }
+
+        //  Deletar estudante (clique longo)
+        listView.setOnItemLongClickListener { _, _, position, _ ->
+            val estudante = dados[position]
+
+            RetrofitClient.api.deletar("Bearer $token", estudante.id!!)
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Toast.makeText(this@HomeActivity, "Apagado!", Toast.LENGTH_SHORT).show()
+                        carregar()
+                    }
+                    override fun onFailure(call: Call<Void>, t: Throwable) {}
+                })
+
+            true
+        }
     }
 
-    private fun carregarEstudantes() {
+    override fun onResume() {
+        super.onResume()
+        carregar()
+    }
+
+    private fun carregar() {
         RetrofitClient.api.getEstudantes("Bearer $token")
             .enqueue(object : Callback<List<Estudante>> {
-
                 override fun onResponse(
                     call: Call<List<Estudante>>,
                     response: Response<List<Estudante>>
                 ) {
                     if (response.isSuccessful) {
-                        val dados = response.body()!!
-                        lista = ArrayList()
+                        dados = response.body()!!
 
-                        for (e in dados) {
-                            lista.add("${e.nome} - ${e.email}")
+                        val lista = dados.map {
+                            "${it.nome} - ${it.email}"
                         }
 
-                        val adapter = ArrayAdapter(
+                        listView.adapter = ArrayAdapter(
                             this@HomeActivity,
                             android.R.layout.simple_list_item_1,
                             lista
                         )
-
-                        listView.adapter = adapter
                     }
                 }
-
-                override fun onFailure(call: Call<List<Estudante>>, t: Throwable) {
-                    // Aqui você pode mostrar um Toast de erro
-                }
+                override fun onFailure(call: Call<List<Estudante>>, t: Throwable) {}
             })
     }
 }

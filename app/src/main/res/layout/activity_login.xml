@@ -61,7 +61,7 @@
 
     <!-- Link de cadastro -->
     <TextView
-        android:text="Criar nova conta"
+        android:text="Bem vindo"
         android:textSize="14sp"
         android:textColor="#1565C0"
         android:gravity="center"

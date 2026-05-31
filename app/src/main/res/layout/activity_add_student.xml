@@ -91,7 +91,7 @@
 
             <EditText
                 android:id="@+id/contacto"
-                android:hint="(xx) xxxxx-xxxx"
+                android:hint="(+258) xxxxx-xxxx"
                 android:inputType="phone"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

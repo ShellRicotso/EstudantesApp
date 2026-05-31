@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Grupo centralizado e reduzido (escala de ~0.7 em relação ao anterior) -->
+    <!-- Centralizado na área de 108x108, o PTP agora ocupa aprox. 50dp de largura -->
+    <group
+        android:translateX="28"
+        android:translateY="44">
+
+        <!-- P -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M0,0 L14,0 C18,0 18,10 14,10 L4,10 L4,20 L0,20 Z M4,3 L4,7 L12,7 C14,7 14,3 12,3 Z" />
+
+        <!-- T -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M20,0 L36,0 L36,4 L30,4 L30,20 L26,20 L26,4 L20,4 Z" />
+
+        <!-- P -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M42,0 L56,0 C60,0 60,10 56,10 L46,10 L46,20 L42,20 Z M46,3 L46,7 L54,7 C56,7 56,3 54,3 Z" />
+
+    </group>
+
+</vector>

@@ -1,28 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="@drawable/bg_gradient_aliceblue">
 
+    <!-- Logo / Nome do sistema -->
+    <TextView
+        android:id="@+id/logoTitle"
+        android:text="PTP-1"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#0D47A1"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:layout_marginBottom="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Campo Email -->
     <EditText
         android:id="@+id/email"
-        android:hint="Email"
+        android:hint="Digite seu email"
+        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@drawable/edittext_border_blue"
+        android:textColor="#0D47A1"
+        android:textColorHint="#607D8B"
+        android:layout_marginBottom="16dp"/>
 
+    <!-- Campo Senha -->
     <EditText
         android:id="@+id/senha"
-        android:hint="Senha"
+        android:hint="Digite sua senha"
         android:inputType="textPassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@drawable/edittext_border_blue"
+        android:textColor="#0D47A1"
+        android:textColorHint="#607D8B"
+        android:layout_marginBottom="24dp"/>
 
+    <!-- Botão Login -->
     <Button
         android:id="@+id/btnLogin"
         android:text="Entrar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:backgroundTint="#2196F3"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif-medium"/>
 
+    <!-- Link de cadastro -->
+    <TextView
+        android:text="Criar nova conta"
+        android:textSize="14sp"
+        android:textColor="#1565C0"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

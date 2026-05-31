@@ -15,59 +15,106 @@ class AddStudentActivity : AppCompatActivity() {
     lateinit var token: String
     var id: Int? = null
 
+    private lateinit var nomeEt: EditText
+    private lateinit var emailEt: EditText
+    private lateinit var contactoEt: EditText
+    private lateinit var btnSalvar: Button
+    private lateinit var btnCancelar: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_student)
 
-        token = intent.getStringExtra("token")!!
+        // Receber extras
+        token = intent.getStringExtra("token") ?: ""
         id = intent.getIntExtra("id", -1)
 
-        val nome = findViewById<EditText>(R.id.nome)
-        val email = findViewById<EditText>(R.id.email)
-        val contacto = findViewById<EditText>(R.id.contacto)
-        val btn = findViewById<Button>(R.id.btnSalvar)
+        // Views
+        nomeEt = findViewById(R.id.nome)
+        emailEt = findViewById(R.id.email)
+        contactoEt = findViewById(R.id.contacto)
+        btnSalvar = findViewById(R.id.btnSalvar)
+        btnCancelar = findViewById(R.id.btnCancelar)
 
-        //  Preencher campos se for edição
+        // Preencher campos se for edição
         if (id != -1) {
-            nome.setText(intent.getStringExtra("nome"))
-            email.setText(intent.getStringExtra("email"))
-            contacto.setText(intent.getStringExtra("contacto"))
+            nomeEt.setText(intent.getStringExtra("nome") ?: "")
+            emailEt.setText(intent.getStringExtra("email") ?: "")
+            contactoEt.setText(intent.getStringExtra("contacto") ?: "")
         }
 
-        btn.setOnClickListener {
+        // Salvar
+        btnSalvar.setOnClickListener {
+            val nome = nomeEt.text.toString().trim()
+            val email = emailEt.text.toString().trim()
+            val contacto = contactoEt.text.toString().trim()
+
+            // Validação simples
+            if (nome.isEmpty()) {
+                nomeEt.error = "Nome obrigatório"
+                nomeEt.requestFocus()
+                return@setOnClickListener
+            }
+            if (email.isEmpty()) {
+                emailEt.error = "Email obrigatório"
+                emailEt.requestFocus()
+                return@setOnClickListener
+            }
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEt.error = "Email inválido"
+                emailEt.requestFocus()
+                return@setOnClickListener
+            }
+            if (contacto.isEmpty()) {
+                contactoEt.error = "Contacto obrigatório"
+                contactoEt.requestFocus()
+                return@setOnClickListener
+            }
+
             val estudante = Estudante(
-                id = if (id == -1) null else id, // só coloca id se for edição
-                nome = nome.text.toString(),
+                id = if (id == -1) null else id,
+                nome = nome,
                 data_nascimento = "2000-01-01",
                 genero = "M",
                 numero_estudante = System.currentTimeMillis().toString(),
                 ano_ingresso = 2024,
-                email = email.text.toString(),
-                contacto = contacto.text.toString(),
+                email = email,
+                contacto = contacto,
                 observacoes = ""
             )
 
+            // Chamada Retrofit
             if (id == -1) {
-                //  Criar novo estudante
                 RetrofitClient.api.criarEstudante("Bearer $token", estudante)
                     .enqueue(callback("Criado!"))
             } else {
-                // ️ Atualizar estudante existente
                 RetrofitClient.api.atualizar("Bearer $token", id!!, estudante)
                     .enqueue(callback("Atualizado!"))
             }
+        }
+
+        // Cancelar: fecha a Activity sem salvar
+        btnCancelar.setOnClickListener {
+            // Se quiser limpar campos em vez de fechar, substitua por:
+            // nomeEt.text.clear(); emailEt.text.clear(); contactoEt.text.clear()
+            finish()
         }
     }
 
     private fun callback(msg: String): Callback<Void> {
         return object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Toast.makeText(this@AddStudentActivity, msg, Toast.LENGTH_SHORT).show()
-                finish()
+                if (response.isSuccessful) {
+                    Toast.makeText(this@AddStudentActivity, msg, Toast.LENGTH_SHORT).show()
+                    setResult(RESULT_OK)
+                    finish()
+                } else {
+                    Toast.makeText(this@AddStudentActivity, "Erro servidor: ${response.code()}", Toast.LENGTH_LONG).show()
+                }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(this@AddStudentActivity, "Erro: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddStudentActivity, "Erro: ${t.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

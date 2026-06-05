@@ -1,5 +1,7 @@
 package com.example.estudantesapp.model
 
+import java.io.Serializable
+
 data class Estudante(
     val id: Int? = null,
     val nome: String,
@@ -10,4 +12,4 @@ data class Estudante(
     val email: String,
     val contacto: String,
     val observacoes: String
-)
+) : Serializable

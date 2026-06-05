@@ -3,12 +3,16 @@ package com.example.estudantesapp
 import com.example.estudantesapp.model.Estudante
 import com.example.estudantesapp.model.LoginRequest
 import com.example.estudantesapp.model.LoginResponse
+import com.example.estudantesapp.model.RegisterRequest
 import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
     @POST("/auth/login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
+
+    @POST("/auth/register")
+    fun register(@Body request: RegisterRequest): Call<Void>
 
     @GET("/estudantes")
     fun getEstudantes(
